@@ -93,8 +93,12 @@ float4 main_0(PS_INPUT Input) : COLOR
     float TEX2_DEN = Tex2Density;
     float TEX3_DEN = Tex3Density;
 
-
     float2 UV = Input.uv;
+	UV.x *= BACK_DEN;
+	UV.y *= BACK_DEN;
+	float4 Tex0 = tex2D(BackGroundTex, UV);
+
+    UV = Input.uv;
     UV.x *= TEX1_DEN;
     UV.y *= TEX1_DEN;
 	float4 Tex1 = tex2D(TexSampler1, UV);
@@ -142,7 +146,7 @@ float4 main_0(PS_INPUT Input) : COLOR
         Tbrush = TargetColor;
     }
 
-    return (Tex1 * Alpha.r * Rd + Tex2 * Alpha.g * Gd + Tex3 * Alpha.b * Bd+ Pbrush * 0.001f + Tbrush * 0.001f);
+    return (Tex0 * Backd + Tex1 * Alpha.r * Rd + Tex2 * Alpha.g * Gd + Tex3 * Alpha.b * Bd+ Pbrush * 0.001f + Tbrush * 0.001f);
 };
 
 technique Shader
